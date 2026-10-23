@@ -4,6 +4,8 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import projectsRoutes from './routes/projectsRoutes.js';
 import experienceRoutes from './routes/experienceRoutes.js';
+import educationRoutes from './routes/educationRoutes.js';
+import perfilRoutes from './routes/perfilRoutes.js';
 
 const app = express();
 
@@ -26,5 +28,9 @@ app.get('/api/health', (req, res) => {
 app.use('/api/projects', projectsRoutes);
 // Ruta de Experiencia
 app.use('/api/experience', experienceRoutes);
+// Ruta de Educación
+app.use('/api/education', educationRoutes);
+//Ruta de Perfil
 
+app.use('/api/perfil', perfilRoutes);
 export default app;
