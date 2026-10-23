@@ -1,0 +1,31 @@
+{
+  "name": "portfolio-backend",
+  "version": "1.0.0",
+  "description": "API REST para el Portfolio",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+     "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dancay5071/portfolio-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dancay5071/portfolio-backend/issues"
+  },
+  "homepage": "https://github.com/Dancay5071/portfolio-backend#readme",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.118.0",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0",
+    "helmet": "^8.3.0",
+    "morgan": "^1.12.1"
+  }
+}
