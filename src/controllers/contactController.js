@@ -22,7 +22,7 @@ export const handleContact = async (req, res) => {
       });
     }
     //  Guardar en Supabase
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('mensajes_contacto')
       .insert([
         {
@@ -32,7 +32,7 @@ export const handleContact = async (req, res) => {
           ip_origen: req.ip || req.headers['x-forwarded-for'] || ''
         }
       ])
-      .single();
+
     if (error) {
       console.error('Error al guardar mensaje en Supabase:', error);
       throw error;
