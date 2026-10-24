@@ -5,7 +5,7 @@ import morgan from 'morgan';
 import projectsRoutes from './routes/projectsRoutes.js';
 import experienceRoutes from './routes/experienceRoutes.js';
 import educationRoutes from './routes/educationRoutes.js';
-import perfilRoutes from './routes/perfilRoutes.js';
+import profileRoutes from './routes/profileRoutes.js';
 
 const app = express();
 
@@ -30,7 +30,6 @@ app.use('/api/projects', projectsRoutes);
 app.use('/api/experience', experienceRoutes);
 // Ruta de Educación
 app.use('/api/education', educationRoutes);
-//Ruta de Perfil
-
-app.use('/api/perfil', perfilRoutes);
+// Ruta de Perfil
+app.use('/api/profile', profileRoutes);
 export default app;
