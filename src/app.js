@@ -2,11 +2,14 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
+
 import projectsRoutes from './routes/projectsRoutes.js';
 import experienceRoutes from './routes/experienceRoutes.js';
 import educationRoutes from './routes/educationRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
+import visitsRoutes from './routes/visitsRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 
 const app = express();
 
@@ -35,4 +38,8 @@ app.use('/api/education', educationRoutes);
 app.use('/api/profile', profileRoutes);
 // Ruta de Contacto
 app.use('/api/contact', contactRoutes);
+// Ruta de Visitas
+app.use('/api/visits', visitsRoutes);
+// Ruta de Autenticación
+app.use('/api/auth', authRoutes);
 export default app;
