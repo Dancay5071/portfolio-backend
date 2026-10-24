@@ -3,29 +3,22 @@ import {supabase} from '../config/supabase.js';
 export const getProfile = async (req, res) => {
   try {
     const { data, error } = await supabase
-      .from('configuracion')
+      .from('perfil')
       .select('*')
-      .eq('id', 'perfil_data')
+      .limit(1)
       .single();
-    if (error && error.code !== 'PGRST116') throw error;
-    
-    // Valores por defecto
-    let profileData = {
-      name: 'Daniela Cabrera',
-      title: 'Técnica en Programación & Desarrolladora de Software',
-      url_foto: ''
-    };
-    if (data && data.theme) {
-      const parsed = typeof data.theme === 'string' ? JSON.parse(data.theme) : data.theme;
-      profileData = {
-        name: parsed.name || profileData.name,
-        title: parsed.title || profileData.title,
-        url_foto: parsed.image || parsed.url_foto || ''
-      };
-    }
+    if (error) throw error;
+    // Entregamos un formato claro y estandarizado
     res.json({
       success: true,
-      data: profileData
+      data: {
+        id: data.id,
+        name: data.nombre,
+        title: data.titulo,
+        description: data.descripcion,
+        url_foto: data.avatar_url,
+        cv_url: data.cv_url
+      }
     });
   } catch (error) {
     console.error('Error al obtener perfil:', error.message);
