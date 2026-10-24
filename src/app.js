@@ -15,11 +15,31 @@ const app = express();
 
 // Middlewares globales de seguridad y formato
 app.use(helmet());
-app.use(cors());
+
+// CORS Configurado de forma segura
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'https://portfolio-danic5071.vercel.app',
+  ...(process.env.CLIENT_URL ? process.env.CLIENT_URL.split(',').map(url => url.trim()) : [])
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+  
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Bloqueado por CORS: Origen no permitido por la política de seguridad.'));
+    }
+  },
+  credentials: true
+}));
+
 app.use(express.json());
 app.use(morgan('dev'));
 
-// Ruta de prueba para verificar que el backend responde
+// Ruta de health check
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',
@@ -28,18 +48,30 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Ruta de Proyectos
+// Rutas de la API
 app.use('/api/projects', projectsRoutes);
-// Ruta de Experiencia
 app.use('/api/experience', experienceRoutes);
-// Ruta de Educación
 app.use('/api/education', educationRoutes);
-// Ruta de Perfil
 app.use('/api/profile', profileRoutes);
-// Ruta de Contacto
 app.use('/api/contact', contactRoutes);
-// Ruta de Visitas
 app.use('/api/visits', visitsRoutes);
-// Ruta de Autenticación
 app.use('/api/auth', authRoutes);
+
+// Manejador de rutas no encontradas (404)
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: `Ruta ${req.originalUrl} no encontrada en este servidor.`
+  });
+});
+
+// Middleware global para atrapar errores no controlados (500)
+app.use((err, req, res, next) => {
+  console.error('⚠️ Error interno capturado en Express:', err.message);
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || 'Error interno del servidor.'
+  });
+});
+
 export default app;
