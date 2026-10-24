@@ -8,7 +8,7 @@ export const getProfile = async (req, res) => {
       .limit(1)
       .single();
     if (error) throw error;
-    // Entregamos un formato claro y estandarizado
+    
     res.json({
       success: true,
       data: {

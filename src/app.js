@@ -6,6 +6,7 @@ import projectsRoutes from './routes/projectsRoutes.js';
 import experienceRoutes from './routes/experienceRoutes.js';
 import educationRoutes from './routes/educationRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
+import contactRoutes from './routes/contactRoutes.js';
 
 const app = express();
 
@@ -32,4 +33,6 @@ app.use('/api/experience', experienceRoutes);
 app.use('/api/education', educationRoutes);
 // Ruta de Perfil
 app.use('/api/profile', profileRoutes);
+// Ruta de Contacto
+app.use('/api/contact', contactRoutes);
 export default app;
