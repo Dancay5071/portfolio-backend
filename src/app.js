@@ -13,6 +13,8 @@ import authRoutes from './routes/authRoutes.js';
 
 const app = express();
 
+app.set('trust proxy', 1);
+
 // Middlewares globales de seguridad y formato
 app.use(helmet());
 
