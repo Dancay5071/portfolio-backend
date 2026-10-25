@@ -1,8 +1,17 @@
-import{Router} from 'express';
-import { getEducation } from '../controllers/educationController.js';
+import { Router } from 'express';
+import {
+  getEducation,
+  createEducation,
+  updateEducation,
+  deleteEducation
+} from '../controllers/educationController.js';
+import { verifyToken } from '../middlewares/authMiddleware.js';
 
-const educationRoutes = Router();
+const router = Router();
 
-educationRoutes.get('/', getEducation);
+router.get('/', getEducation);
+router.post('/', verifyToken, createEducation);
+router.put('/:id', verifyToken, updateEducation);
+router.delete('/:id', verifyToken, deleteEducation);
 
-export default educationRoutes;
+export default router;
