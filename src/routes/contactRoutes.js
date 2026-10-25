@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { handleContact } from '../controllers/contactController.js';
+import { handleContact, getMessages, deleteMessage } from '../controllers/contactController.js';
+import { verifyToken } from '../middlewares/authMiddleware.js';
 import rateLimit from 'express-rate-limit';
 
 const router = Router();
@@ -19,4 +20,9 @@ const contactLimiter = rateLimit({
 // POST /api/contact protegido con rate limit
 router.post('/', contactLimiter, handleContact);
 
+// GET y DELETE protegidos con verifyToken
+router.get('/', verifyToken, getMessages);
+router.delete('/:id', verifyToken, deleteMessage);
+
 export default router;
+

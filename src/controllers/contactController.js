@@ -57,3 +57,50 @@ export const handleContact = async (req, res) => {
     });
   }
 };
+
+// GET /api/contact - Obtener todos los mensajes (protegido)
+export const getMessages = async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('mensajes_contacto')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    res.json({
+      success: true,
+      data: data || []
+    });
+  } catch (error) {
+    console.error('Error al obtener mensajes:', error.message);
+    res.status(500).json({
+      success: false,
+      message: 'Error al obtener mensajes de contacto'
+    });
+  }
+};
+
+// DELETE /api/contact/:id - Eliminar un mensaje (protegido)
+export const deleteMessage = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { error } = await supabase
+      .from('mensajes_contacto')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+
+    res.json({
+      success: true,
+      message: 'Mensaje eliminado correctamente'
+    });
+  } catch (error) {
+    console.error('Error al eliminar mensaje:', error.message);
+    res.status(500).json({
+      success: false,
+      message: 'Error al eliminar el mensaje'
+    });
+  }
+};
