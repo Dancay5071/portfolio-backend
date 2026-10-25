@@ -21,6 +21,10 @@ app.use(helmet());
 // CORS Configurado de forma segura
 const allowedOrigins = [
   'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:5175',
+  'http://127.0.0.1:5173',
+  'http://127.0.0.1:5174',
   'http://localhost:3000',
   'https://portfolio-danic5071.vercel.app',
   ...(process.env.CLIENT_URL ? process.env.CLIENT_URL.split(',').map(url => url.trim()) : [])
@@ -28,11 +32,10 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: (origin, callback) => {
-  
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (!origin || allowedOrigins.includes(origin) || /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('Bloqueado por CORS: Origen no permitido por la política de seguridad.'));
+      callback(null, false);
     }
   },
   credentials: true

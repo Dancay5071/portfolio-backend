@@ -92,7 +92,7 @@ export const updateExperience = async (req, res) => {
     console.error('Error al actualizar experiencia:', error.message);
     res.status(500).json({
       success: false,
-      message: 'Error al actualizar la experiencia'
+      message: error.message || 'Error al actualizar la experiencia'
     });
   }
 };
