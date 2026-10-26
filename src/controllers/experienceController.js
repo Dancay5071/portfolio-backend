@@ -49,15 +49,21 @@ export const createExperience = async (req, res) => {
           descripcion: descripcion || ''
         }
       ])
-      .select()
-      .single();
+      .select();
 
     if (error) throw error;
+
+    if (!data || data.length === 0) {
+      return res.status(403).json({
+        success: false,
+        message: 'No se pudo crear la experiencia. Asegúrate de configurar SUPABASE_SERVICE_ROLE_KEY en Render.'
+      });
+    }
 
     res.status(201).json({
       success: true,
       message: 'Experiencia creada con éxito',
-      data
+      data: data[0]
     });
   } catch (error) {
     console.error('Error al crear experiencia:', error.message);
@@ -78,15 +84,21 @@ export const updateExperience = async (req, res) => {
       .from('experiencia')
       .update(updates)
       .eq('id', id)
-      .select()
-      .single();
+      .select();
 
     if (error) throw error;
+
+    if (!data || data.length === 0) {
+      return res.status(403).json({
+        success: false,
+        message: 'No se pudo actualizar el registro. Asegúrate de configurar SUPABASE_SERVICE_ROLE_KEY en las variables de entorno de Render.'
+      });
+    }
 
     res.json({
       success: true,
       message: 'Experiencia actualizada correctamente',
-      data
+      data: data[0]
     });
   } catch (error) {
     console.error('Error al actualizar experiencia:', error.message);

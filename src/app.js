@@ -49,6 +49,7 @@ app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',
     message: 'Backend del Portfolio funcionando correctamente',
+    hasServiceRoleKey: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
     timestamp: new Date().toISOString()
   });
 });

@@ -48,13 +48,18 @@ export const createProject = async (req, res) => {
           image_url: image_url || ''
         }
       ])
-      .select()
-      .single();
+      .select();
     if (error) throw error;
+    if (!data || data.length === 0) {
+      return res.status(403).json({
+        success: false,
+        message: 'No se pudo crear el proyecto. Asegúrate de configurar SUPABASE_SERVICE_ROLE_KEY en Render.'
+      });
+    }
     res.status(201).json({
       success: true,
       message: 'Proyecto creado exitosamente 🚀',
-      data: data
+      data: data[0]
     });
   } catch (error) {
     console.error('Error al crear proyecto:', error.message);
@@ -76,13 +81,18 @@ export const updateProject = async (req, res) => {
       .from('proyectos')
       .update(updates)
       .eq('id', id)
-      .select()
-      .single();
+      .select();
     if (error) throw error;
+    if (!data || data.length === 0) {
+      return res.status(403).json({
+        success: false,
+        message: 'No se pudo actualizar el proyecto. Asegúrate de configurar SUPABASE_SERVICE_ROLE_KEY en Render.'
+      });
+    }
     res.json({
       success: true,
       message: 'Proyecto actualizado correctamente.',
-      data: data
+      data: data[0]
     });
   } catch (error) {
     console.error('Error al actualizar proyecto:', error.message);

@@ -35,11 +35,16 @@ export const createEducation = async (req, res) => {
         fecha_fin: fecha_fin || null,
         descripcion: descripcion || ''
       }])
-      .select()
-      .single();
+      .select();
 
     if (error) throw error;
-    res.status(201).json({ success: true, message: 'Título creado con éxito', data });
+    if (!data || data.length === 0) {
+      return res.status(403).json({
+        success: false,
+        message: 'No se pudo crear la educación. Asegúrate de configurar SUPABASE_SERVICE_ROLE_KEY en Render.'
+      });
+    }
+    res.status(201).json({ success: true, message: 'Título creado con éxito', data: data[0] });
   } catch (error) {
     console.error('Error al crear educación:', error.message);
     res.status(500).json({ success: false, message: 'Error al crear educación' });
@@ -54,11 +59,16 @@ export const updateEducation = async (req, res) => {
       .from('educacion')
       .update(req.body)
       .eq('id', id)
-      .select()
-      .single();
+      .select();
 
     if (error) throw error;
-    res.json({ success: true, message: 'Título actualizado correctamente', data });
+    if (!data || data.length === 0) {
+      return res.status(403).json({
+        success: false,
+        message: 'No se pudo actualizar la educación. Asegúrate de configurar SUPABASE_SERVICE_ROLE_KEY en Render.'
+      });
+    }
+    res.json({ success: true, message: 'Título actualizado correctamente', data: data[0] });
   } catch (error) {
     console.error('Error al actualizar educación:', error.message);
     res.status(500).json({ success: false, message: 'Error al actualizar educación' });
