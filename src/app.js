@@ -10,6 +10,7 @@ import profileRoutes from './routes/profileRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
 import visitsRoutes from './routes/visitsRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import cvRoutes from './routes/cvRoutes.js';
 
 const app = express();
 
@@ -62,6 +63,7 @@ app.use('/api/profile', profileRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/visits', visitsRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/cv', cvRoutes);
 
 // Manejador de rutas no encontradas (404)
 app.use((req, res) => {

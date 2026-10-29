@@ -68,3 +68,41 @@ export const sendNotificationEmail = async ({ nombre, email, mensaje }) => {
 
   return await mailTransporter.sendMail(mailOptions);
 };
+
+export const sendCvRequestNotificationEmail = async ({ nombre, email, empresa }) => {
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    console.log('ℹ️ [Email]: Modo local. Solicitud de CV procesada, pero falta configurar EMAIL_USER y EMAIL_PASS en .env.');
+    return { sent: false, reason: 'credentials_missing' };
+  }
+
+  const mailTransporter = getTransporter();
+
+  const safeNombre = escapeHtml(nombre);
+  const safeEmail = escapeHtml(email);
+  const safeEmpresa = escapeHtml(empresa || 'No especificada');
+
+  const mailOptions = {
+    from: `"Portfolio - Solicitud de CV" <${process.env.EMAIL_USER}>`,
+    to: process.env.EMAIL_USER,
+    replyTo: email,
+    subject: `📄 ¡Alguien solicitó tu CV! (${safeNombre})`,
+    text: `Nueva solicitud de CV:\n\nNombre: ${nombre}\nEmail: ${email}\nEmpresa: ${empresa || 'No especificada'}\n\nEnviado desde tu Portfolio.`,
+    html: `
+      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #0b0914; color: #f3f4f6; padding: 30px; border-radius: 12px; max-width: 600px; margin: 0 auto; border: 1px solid rgba(192, 132, 252, 0.2);">
+        <h2 style="color: #facc15; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; margin-top: 0;">
+          📄 ¡Alguien acaba de solicitar tu CV!
+        </h2>
+        <p style="margin: 10px 0; font-size: 15px;"><strong>Nombre:</strong> ${safeNombre}</p>
+        <p style="margin: 10px 0; font-size: 15px;"><strong>Email:</strong> <a href="mailto:${safeEmail}" style="color: #38bdf8; text-decoration: none;">${safeEmail}</a></p>
+        <p style="margin: 10px 0; font-size: 15px;"><strong>Empresa / Organización:</strong> ${safeEmpresa}</p>
+        <p style="margin: 10px 0; font-size: 15px;"><strong>Fecha y Hora:</strong> ${new Date().toLocaleString('es-AR')}</p>
+        <br />
+        <div style="background: rgba(255, 255, 255, 0.05); padding: 14px; border-radius: 8px; border-left: 4px solid #facc15; font-size: 13px; color: #cbd5e1;">
+          Esta persona completó el filtro y se le habilitó el acceso a tu currículum. Podés escribirle directamente a su correo haciendo clic en responder.
+        </div>
+      </div>
+    `,
+  };
+
+  return await mailTransporter.sendMail(mailOptions);
+};

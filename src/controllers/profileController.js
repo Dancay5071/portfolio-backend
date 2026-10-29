@@ -18,7 +18,9 @@ export const getProfile = async (req, res) => {
         title: data.titulo,
         description: data.descripcion,
         url_foto: data.avatar_url,
-        cv_url: data.cv_url
+        // Protegemos el enlace directo del CV para que no sea visible públicamente
+        // en la petición inicial de la web. En su lugar enviamos has_cv.
+        has_cv: Boolean(data.cv_url)
       } : null
     });
   } catch (error) {
