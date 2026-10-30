@@ -28,8 +28,24 @@ const getTransporter = () => {
 
 export const sendNotificationEmail = async ({ nombre, email, mensaje }) => {
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-    console.log('ℹ️ [Email]: Modo local. Mensaje guardado en Supabase, pero falta configurar EMAIL_USER y EMAIL_PASS en .env.');
-    return { sent: false, reason: 'credentials_missing' };
+    console.log('ℹ️ [Email]: Modo sin SMTP directo. Enviando notificación a Daniela vía canal Formspree...');
+    try {
+      await fetch('https://formspree.io/f/xgojrjpb', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: `✨ Nuevo mensaje de ${nombre} en tu Portfolio`,
+          nombre,
+          email,
+          mensaje,
+          tipo: 'Mensaje de Contacto'
+        })
+      });
+      return { sent: true, method: 'formspree' };
+    } catch (formspreeErr) {
+      console.warn('Fallo en notificación Formspree:', formspreeErr.message);
+      return { sent: false, reason: 'credentials_missing' };
+    }
   }
 
   const mailTransporter = getTransporter();
@@ -71,8 +87,24 @@ export const sendNotificationEmail = async ({ nombre, email, mensaje }) => {
 
 export const sendCvRequestNotificationEmail = async ({ nombre, email, empresa }) => {
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-    console.log('ℹ️ [Email]: Modo local. Solicitud de CV procesada, pero falta configurar EMAIL_USER y EMAIL_PASS en .env.');
-    return { sent: false, reason: 'credentials_missing' };
+    console.log('ℹ️ [Email]: Modo sin SMTP directo. Enviando aviso de CV a Daniela vía canal Formspree...');
+    try {
+      await fetch('https://formspree.io/f/xgojrjpb', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: `📄 ¡Alguien solicitó tu CV! (${nombre})`,
+          nombre,
+          email,
+          empresa: empresa || 'No especificada',
+          tipo: 'Solicitud de CV'
+        })
+      });
+      return { sent: true, method: 'formspree' };
+    } catch (formspreeErr) {
+      console.warn('Fallo en notificación Formspree:', formspreeErr.message);
+      return { sent: false, reason: 'credentials_missing' };
+    }
   }
 
   const mailTransporter = getTransporter();
